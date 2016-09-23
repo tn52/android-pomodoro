@@ -20,6 +20,7 @@ public abstract class CountDownTimerPausable {
         this.countDownInterval = countDownInterval;
         this.millisRemaining = this.millisInFuture;
     }
+
     private void createCountDownTimer(){
         countDownTimer = new CountDownTimer(millisRemaining,countDownInterval) {
 
@@ -75,13 +76,15 @@ public abstract class CountDownTimerPausable {
     public void pause()throws IllegalStateException{
         if(isPaused==false){
             countDownTimer.cancel();
-        } else{
-            throw new IllegalStateException("CountDownTimerPausable is already in pause state, start counter before pausing it.");
         }
         isPaused = true;
     }
     public boolean isPaused() {
         return isPaused;
+    }
+
+    public void reset(){
+        this.millisRemaining = this.millisInFuture;
     }
 
 }

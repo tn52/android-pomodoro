@@ -34,7 +34,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="Large Text"
+        android:text="Time: 25:00"
         android:id="@+id/countdownTextView"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
@@ -56,5 +56,33 @@
         android:layout_centerVertical="true"
         android:layout_centerHorizontal="true"
         android:onClick="resetButtonOnClick" />
+
+    <Chronometer
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/chronometer"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true"
+        android:layout_above="@+id/textClock"
+        android:layout_alignEnd="@+id/startButton"
+        android:text="25:00" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:text="completed:"
+        android:id="@+id/completedTextView"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentStart="true" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:text="incomplete:"
+        android:id="@+id/incompleteTextView"
+        android:layout_alignParentBottom="true"
+        android:layout_alignStart="@+id/textClock" />
 
 </RelativeLayout>
