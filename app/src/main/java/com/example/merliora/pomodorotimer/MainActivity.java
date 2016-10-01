@@ -13,6 +13,7 @@ import android.widget.TextView;
 import android.view.View;
 import android.widget.Chronometer;
 
+import java.sql.Time;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -20,15 +21,20 @@ import java.util.GregorianCalendar;
 
 public class MainActivity extends AppCompatActivity {
 
+    MyDBHandler dbHandler;
+
+    public static final int COUNTDOWN_DURATION_MINUTES = 25;
+    public static final int INTERVAL_DURATION_SECONDS = 1;
     public static final String DEBUG = "Testing";
     public boolean isPaused = true;
     public ArrayList<Pomodoro> completedPomodoroList = new ArrayList<Pomodoro>();
     public ArrayList<Pomodoro> incompletePomodoroList = new ArrayList<Pomodoro>();
     public Pomodoro currentPomodoro;
+    public TextView debugText;
 
     Chronometer chronometer;
 
-    CountDownTimerPausable countDownTimer = new CountDownTimerPausable(1500, 1000){
+    CountDownTimerPausable countDownTimer = new CountDownTimerPausable(COUNTDOWN_DURATION_MINUTES*60*1000, INTERVAL_DURATION_SECONDS*1000){
 
         GregorianCalendar gc = new GregorianCalendar();
         Date time = gc.getTime();
@@ -62,7 +68,12 @@ public class MainActivity extends AppCompatActivity {
         chronometer = (Chronometer) findViewById(R.id.chronometer);
         chronometer.setBase(SystemClock.elapsedRealtime());
 
+        dbHandler = new MyDBHandler(this, null, null, 1);
+
         Button startButton = (Button)findViewById(R.id.startButton);
+
+        debugText = (TextView)findViewById(R.id.debugTextView);
+        debugText.setText("debug: " + 5);
 
         startButton.setOnClickListener(
                 new Button.OnClickListener(){
@@ -70,7 +81,9 @@ public class MainActivity extends AppCompatActivity {
                         countDownTimer.start();
                         chronometer.start();
                         if (currentPomodoro==null || currentPomodoro.getEnded()){
-                            currentPomodoro = new Pomodoro(false);
+                            Long timeStampLong = System.currentTimeMillis()/1000;
+                            String timeStamp = timeStampLong.toString();
+                            currentPomodoro = new Pomodoro(timeStamp, false);
                         }
                     }
                 }
@@ -104,6 +117,14 @@ public class MainActivity extends AppCompatActivity {
                             currentPomodoro.setEnded(true);
                             if (currentPomodoro.getCompleted() == false) {
                                 incompletePomodoroList.add(currentPomodoro);
+
+                                dbHandler.addPomodoro(currentPomodoro);
+                                int count = dbHandler.getNumPomodoro();
+//                                TextView debugText = (TextView)findViewById(R.id.debugTextView);
+                                System.out.println("******COUNT******" + count);
+//                                debugText.setText(count);
+
+
                             } else {
 //                                completedPomodoroList.add(currentPomodoro);
                             }
